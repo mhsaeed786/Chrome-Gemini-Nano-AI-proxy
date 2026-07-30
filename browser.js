@@ -9,7 +9,7 @@ async function initBrowser(chromeExecutablePath) {
   const executablePath = chromeExecutablePath || 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
   
   console.log(`Launching Chrome from ${executablePath} with Multimodal flags...`);
-  browser = await puppeteer.launch({
+  const launchOptions = {
     executablePath,
     headless: true,
     args: [
@@ -17,7 +17,14 @@ async function initBrowser(chromeExecutablePath) {
       '--no-sandbox', 
       '--disable-setuid-sandbox'
     ]
-  });
+  };
+
+  // If the user wants to use their real Chrome profile (which has the model downloaded)
+  if (process.env.CHROME_USER_DATA_DIR) {
+    launchOptions.userDataDir = process.env.CHROME_USER_DATA_DIR;
+  }
+
+  browser = await puppeteer.launch(launchOptions);
 
   page = await browser.newPage();
   
