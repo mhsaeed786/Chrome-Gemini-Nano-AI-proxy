@@ -66,7 +66,7 @@ router.post('/v1/chat/completions', async (req, res) => {
         id, object: 'chat.completion.chunk', created, model: 'chrome-ai-nano',
         choices: [{ delta: {}, index: 0, finish_reason: 'stop' }]
       })}\n\n`);
-      return res.write('data: [DONE]\n\n');
+      return res.end('data: [DONE]\n\n');
       
     } else {
       const result = await generate(prompt, systemPrompt.trim(), history);
